@@ -17,8 +17,10 @@ __pycache__/
 data/raw/
 data/processed/
 
-# Generated charts
-outputs/
+# Ignore generated output files except charts used in README
+outputs/*
+!outputs/charts/
+!outputs/charts/*.png
 
 # Python cache
 *.pyc
