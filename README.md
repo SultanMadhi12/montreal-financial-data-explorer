@@ -15,6 +15,14 @@ This project builds a complete financial data pipeline: collecting company finan
 
 ---
 
+## Interactive Analysis
+
+A detailed walkthrough of the financial analysis, calculations, and visualizations is available in the Jupyter notebook:
+
+[Open Final Analysis Notebook](notebooks/final_analysis.ipynb)
+
+---
+
 ## Research Question
 
 How have selected Montreal-connected public companies performed financially from 2021–2025, and how do their financial profiles compare within the broader Canadian economic environment?
