@@ -2,8 +2,8 @@ import requests
 import pandas as pd
 
 
-# Lightspeed's SEC identifier
-cik = "CIK0001823306"
+# CAE's SEC identifier
+cik = "CIK0001173382"
 
 url = f"https://data.sec.gov/api/xbrl/companyfacts/{cik}.json"
 
@@ -12,7 +12,6 @@ headers = {
 }
 
 
-# Download Lightspeed's financial data from the SEC
 response = requests.get(
     url,
     headers=headers,
@@ -24,9 +23,12 @@ response.raise_for_status()
 data = response.json()
 
 
-# Financial metrics used in this project
+
+
+
+# Financial metrics we want to collect
 metrics = {
-    "revenue": "RevenueFromContractsWithCustomers",
+    "revenue": "Revenue",
     "operating_income": "ProfitLossFromOperatingActivities",
     "net_income": "ProfitLoss",
     "total_assets": "Assets",
@@ -36,12 +38,13 @@ metrics = {
 }
 
 
+
 def extract_annual_metric(data, concept):
     """
-    Get annual USD values for one Lightspeed financial metric.
+    Extract annual CAD values for one CAE financial concept.
     """
 
-    values = data["facts"]["ifrs-full"][concept]["units"]["USD"]
+    values = data["facts"]["ifrs-full"][concept]["units"]["CAD"]
 
     rows = []
 
@@ -61,8 +64,7 @@ def extract_annual_metric(data, concept):
     metric_df["date"] = pd.to_datetime(metric_df["date"])
     metric_df["filed"] = pd.to_datetime(metric_df["filed"])
 
-    # The SEC sometimes repeats the same fiscal year in later filings.
-    # Keep the most recently filed value.
+    # Keep the most recently filed value for each fiscal year-end
     metric_df = metric_df.sort_values("filed")
 
     metric_df = metric_df.drop_duplicates(
@@ -75,7 +77,9 @@ def extract_annual_metric(data, concept):
     return metric_df
 
 
-# Build one table containing all financial metrics
+
+
+# Combine all metrics into one table
 financial_data = None
 
 
@@ -104,22 +108,21 @@ for metric_name, concept in metrics.items():
         )
 
 
-# Put the years in chronological order
 financial_data = financial_data.sort_values("date")
 
 
-# Keep the five fiscal years used in our analysis
 financial_data = financial_data[
-    (financial_data["date"].dt.year >= 2021)
-    & (financial_data["date"].dt.year <= 2025)
+    financial_data["date"].dt.year >= 2021
 ].copy()
 
 
-print("\nLIGHTSPEED 2021-2025 DATA")
+print("\nCAE 2021-2025 DATA")
 print(financial_data.to_string(index=False))
 
 
-# Make sure the final dataset is complete
+
+# Final validation
+
 expected_columns = [
     "date",
     "revenue",
@@ -131,19 +134,16 @@ expected_columns = [
     "operating_cash_flow"
 ]
 
-
 if financial_data[expected_columns].isna().any().any():
-    raise ValueError(
-        "Lightspeed dataset still contains missing values."
-    )
+    raise ValueError("CAE dataset still contains missing values.")
 
 
-# Save the cleaned data
+# Save the cleaned dataset
+
 financial_data.to_csv(
-    "data/processed/lightspeed_financials.csv",
+    "data/processed/cae_financials.csv",
     index=False
 )
 
-
-print("\nLightspeed data validation passed.")
-print("Saved to data/processed/lightspeed_financials.csv")
+print("\nCAE data validation passed.")
+print("Saved to data/processed/cae_financials.csv")
