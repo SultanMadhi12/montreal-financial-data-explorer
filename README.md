@@ -222,6 +222,40 @@ All charts are automatically generated through Python.
 
 ---
 
+## Project Results
+
+The analysis produced several visual comparisons showing differences in growth, profitability, cash generation, and financial structure.
+
+### Revenue Growth Comparison
+
+![Indexed Revenue Growth](outputs/charts/01_indexed_revenue_growth.png)
+
+### Revenue Growth Rates
+
+![Revenue Growth](outputs/charts/02_revenue_growth.png)
+
+### Operating Margin Comparison
+
+![Operating Margin](outputs/charts/03_operating_margin.png)
+
+### Net Profit Margin Comparison
+
+![Net Margin](outputs/charts/04_net_margin.png)
+
+### Balance Sheet Structure
+
+![Liabilities to Assets](outputs/charts/05_liabilities_to_assets.png)
+
+### Operating Cash Flow Performance
+
+![Operating Cash Flow Margin](outputs/charts/06_operating_cash_flow_margin.png)
+
+### Canadian Macroeconomic Environment
+
+![Canadian Macro Environment](outputs/charts/07_canadian_macro_environment.png)
+
+---
+
 ## SQL Database Component
 
 The project uses SQLite to create a structured financial database.
